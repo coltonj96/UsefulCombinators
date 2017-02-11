@@ -1,0 +1,11 @@
+{
+  "name": "UsefulCombinators",
+  "version": "0.0.1",
+  "title": "Useful Combinators",
+  "author": "coltonj96",
+  "contact": "",
+  "homepage": "",
+  "description": "Adds useful combinators (Obviously)",
+  "factorio_version": "0.14",
+  "dependencies": ["base >= 0.11.1"]
+ }
