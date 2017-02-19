@@ -1,0 +1,53 @@
+data:extend(
+{ 
+  {
+    type = "item",
+    name = "timer-combinator",
+    icon = "__UsefulCombinators__/graphics/icons/timer-combinator.png",
+    flags = { "goes-to-quickbar" },
+    subgroup = "circuit-network",
+    place_result="timer-combinator",
+    order = "b[combinators]-u[timer-combinator]",
+    stack_size= 10,
+  },
+  {
+    type = "item",
+    name = "counting-combinator",
+    icon = "__UsefulCombinators__/graphics/icons/counting-combinator.png",
+    flags = { "goes-to-quickbar" },
+    subgroup = "circuit-network",
+    place_result="counting-combinator",
+    order = "b[combinators]-u[counting-combinator]",
+    stack_size= 10,
+  },
+  {
+    type = "item",
+    name = "random-combinator",
+    icon = "__UsefulCombinators__/graphics/icons/random-combinator.png",
+    flags = { "goes-to-quickbar" },
+    subgroup = "circuit-network",
+    place_result="random-combinator",
+    order = "b[combinators]-u[random-combinator]",
+    stack_size= 10,
+  }--[[,
+  {
+    type = "item",
+    name = "logic-combinator",
+    icon = "__UsefulCombinators__/graphics/icons/logic-combinator.png",
+    flags = { "goes-to-quickbar" },
+    subgroup = "circuit-network",
+    place_result="logic-combinator",
+    order = "b[combinators]-u[logic-combinator]",
+    stack_size= 10,
+  }]],
+  {
+    type = "item",
+    name = "comparator-combinator",
+    icon = "__UsefulCombinators__/graphics/icons/comparator-combinator.png",
+    flags = { "goes-to-quickbar" },
+    subgroup = "circuit-network",
+    place_result="comparator-combinator",
+    order = "b[combinators]-u[comparator-combinator]",
+    stack_size= 10,
+  }
+}) 
