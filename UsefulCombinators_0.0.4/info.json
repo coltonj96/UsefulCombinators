@@ -1,0 +1,11 @@
+{
+  "name": "UsefulCombinators",
+  "version": "0.0.4",
+  "title": "Useful Combinators",
+  "author": "coltonj96",
+  "contact": "coltonjgriswold@aim.com",
+  "homepage": "",
+  "description": "Adds useful combinators such as a Timer Combinator and more!",
+  "factorio_version": "0.14",
+  "dependencies": ["base >= 0.11.1"]
+ }
