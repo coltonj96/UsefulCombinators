@@ -64,19 +64,13 @@ classes["counting-combinator"] = {
         local count,reset = params[1].count or 1, params[2].count or 0
         if control.enabled then
         if (reset <= 0) then reset = 0 end
+        if count < 0 then count = 0 end
         local out = 0
         if reset > 0 and count >= reset then
           count = 0
           out = 1
         end
-        if reset == 0 and count > reset then
-          if get_count(control, {type = "virtual", name = "minus-one-signal"}) > 0 then
-            count = count - get_count(control, {type = "virtual", name = "minus-one-signal"})
-            if count < 0 then
-              count = 0
-            end
-          end
-        end
+        count = count - get_count(control, {type = "virtual", name = "minus-one-signal"})
         count = count + get_count(control, {type = "virtual", name = "plus-one-signal"})
         control.parameters = {
           parameters = {
