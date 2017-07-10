@@ -1,0 +1,11 @@
+{
+  "name": "UsefulCombinators",
+  "version": "0.3.3",
+  "title": "Useful Combinators",
+  "author": "coltonj96",
+  "contact": "coltonjgriswold@aim.com",
+  "homepage": "https://mods.factorio.com/mods/coltonj96/UsefulCombinators",
+  "description": "(MAJOR UPDATE, expect bugs and errors) Adds many useful combinators that do various things! some simplify combinator logic whilst others add new functionality!",
+  "factorio_version": "0.15",
+  "dependencies": ["base >= 0.15"]
+ }
