@@ -1581,7 +1581,7 @@ classes["receiver-combinator"] = {
             end
           end
           if next(senders) ~= nil then
-            for _,sender in pairs(senders)
+            for _,sender in pairs(senders) do
               local sender_control = sender.entity.get_control_behavior()
               for i = 2,6 do
                 if sender.params[i].signal and sender.params[i].signal.name then
