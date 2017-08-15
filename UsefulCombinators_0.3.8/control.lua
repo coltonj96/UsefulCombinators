@@ -1574,18 +1574,19 @@ classes["receiver-combinator"] = {
         local slots = {}
         local p1 = object.meta.signal
         if control.enabled then
-          local sender
+          local senders = {}
           for k,v in pairs(data["emitter-combinator"]) do
             if v.meta.params[1] and (p1.name == v.meta.params[1].signal.name) then
-              sender = v.meta
-              break;
+              table.insert(senders, v.meta)
             end
           end
-          if sender then
-            local sender_control = sender.entity.get_control_behavior()
-            for i = 2,6 do
-              if sender.params[i].signal and sender.params[i].signal.name then
-                table.insert(slots, {signal = sender.params[i].signal, count = sender.params[i].count, index = (i - 1)})
+          if next(senders) ~= nil then
+            for _,sender in pairs(senders)
+              local sender_control = sender.entity.get_control_behavior()
+              for i = 2,6 do
+                if sender.params[i].signal and sender.params[i].signal.name then
+                  table.insert(slots, {signal = sender.params[i].signal, count = sender.params[i].count, index = (i - 1)})
+                end
               end
             end
           end
