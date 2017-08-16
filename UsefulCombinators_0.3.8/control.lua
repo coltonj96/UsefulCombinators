@@ -1482,12 +1482,10 @@ classes["emitter-combinator"] = {
   on_click = function(player, object)
     local gui = player.gui.center
     local params = {}
-    for i = 1,6 do
-      if gui["uc"]["emitter-combinator"]["signal"..i].elem_value then
-        params[i] = {signal = gui["uc"]["emitter-combinator"]["signal"..i].elem_value}
-      else
-        params[i] = {signal = {type = "virtual"}}
-      end
+    if gui["uc"]["emitter-combinator"]["signal"].elem_value then
+      params[1] = {signal = gui["uc"]["emitter-combinator"]["signal"].elem_value}
+    else
+      params[1] = {signal = {type = "virtual"}}
     end
     object.meta.params = params
   end,
@@ -1499,17 +1497,9 @@ classes["emitter-combinator"] = {
       local layout = uc.add{type = "table", name = "emitter-combinator", colspan = 8}
       layout.add{type = "label", caption = "Signal: (?)", tooltip = {"emitter-combinator.signal"}}
       if params[1] and params[1].signal then  
-        layout.add{type = "choose-elem-button", name = "signal1", elem_type = "signal", signal = params[1].signal}
+        layout.add{type = "choose-elem-button", name = "signal", elem_type = "signal", signal = params[1].signal}
       else
-        layout.add{type = "choose-elem-button", name = "signal1", elem_type = "signal"}
-      end
-      layout.add{type = "label", caption = "Filter: (?)", tooltip = {"emitter-combinator.filter"}}
-      for i= 2,6 do
-        if params[i] and params[i].signal then
-          layout.add{type = "choose-elem-button", name = "signal" .. i, elem_type = "signal", signal = params[i].signal}
-        else
-          layout.add{type = "choose-elem-button", name = "signal" .. i, elem_type = "signal"}
-        end
+        layout.add{type = "choose-elem-button", name = "signal", elem_type = "signal"}
       end
       layout.add{type = "button", name = "uc-exit", caption = "Ok"}
     end
@@ -1523,19 +1513,7 @@ classes["emitter-combinator"] = {
     }
   end,
   on_destroy = function() end,
-  on_tick = function(object)
-    local control = object.meta.entity.get_control_behavior()
-    if control then
-      local params = object.meta.params
-      if control.enabled then
-        for i = 2,6 do
-          if params[i] and params[i].signal and params[i].signal.name then
-            object.meta.params[i].count = get_count(control, params[i].signal)
-          end
-        end
-      end
-    end
-  end
+  on_tick = function() end
 }
 
 classes["receiver-combinator"] = {
@@ -1574,22 +1552,15 @@ classes["receiver-combinator"] = {
         local slots = {}
         local p1 = object.meta.signal
         if control.enabled then
-          local senders = {}
           for k,v in pairs(data["emitter-combinator"]) do
             if v.meta.params[1] and (p1.name == v.meta.params[1].signal.name) then
-              table.insert(senders, v.meta)
+              local signals = get_all_signals(v.meta.entity.get_control_behavior())
+              slots = merge_signals_array(slots, signals)
             end
           end
-          if next(senders) ~= nil then
-            for _,sender in pairs(senders) do
-              local sender_control = sender.entity.get_control_behavior()
-              for i = 2,6 do
-                if sender.params[i].signal and sender.params[i].signal.name then
-                  table.insert(slots, {signal = sender.params[i].signal, count = sender.params[i].count, index = (i - 1)})
-                end
-              end
-            end
-          end
+
+          slots = set_primary_key(slots, 'index')
+
           control.parameters = {
             parameters = slots
           }
@@ -1834,6 +1805,55 @@ classes["pollution-combinator"] = {
     end
   end
 }
+
+-- get and sum of all items on red and green wires, for this control behavior
+function get_all_signals(control)
+  local red =   control.get_circuit_network(defines.wire_type.red)
+  local green = control.get_circuit_network(defines.wire_type.green)
+
+  if red and red.signals and green and green.signals then
+    return merge_signals_array(red.signals, green.signals)
+  elseif red and red.signals then
+    return red.signals
+  elseif green and green.signals then
+    return green.signals
+  else
+    return {}
+  end
+
+end
+
+-- get two array of signals and merge them, identical item are sum
+function merge_signals_array(array1, array2)
+  local merge = {}
+
+  for _,v in pairs(array1) do
+    merge[v.signal.name] = v
+  end
+
+  for _,v in pairs(array2) do
+    if merge[v.signal.name] == nil then
+      merge[v.signal.name] = v
+    else
+      merge[v.signal.name].count = merge[v.signal.name].count + v.count
+    end
+  end
+
+  return merge
+end
+
+--[[
+  for each element of the provided array, 
+  set the provided key with an incremental value, stated at 1
+]] 
+function set_primary_key( array, key )
+  local index = 1
+  for _,v in pairs(array) do
+    v[key] = index
+    index = index + 1
+  end
+  return array
+end
 
 function get_count(control, signal)
   if not signal then return 0 end
