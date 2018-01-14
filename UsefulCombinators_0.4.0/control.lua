@@ -366,22 +366,34 @@ classes["max-combinator"] = {
         local signals = get_signals(control)
         local signal = {type = "virtual"}
         local count = -math.huge
-        for k,v in pairs(signals) do
-          count = math.max(count, v.count)
-          if count == v.count then
-            signal = v.signal
+        if signals then
+          for k,v in pairs(signals) do
+              if v.signal.name ~= "output-signal" then
+                count = math.max(count, v.count)
+                if count == v.count then
+                signal = v.signal
+                end
+              end
           end
         end
-        count = 1
+        local ncount = 1
         if count == -math.huge then
+          ncount = 0
           count = 0
         end
+        local f1 = false
         for _,i in pairs(params) do
           if i.signal.name then
+            f1 = true
             if signal.name == i.signal.name then
-              table.insert(slots, {signal = signal, count = count, index = 1})
+              table.insert(slots, {signal = signal, count = ncount, index = 1})
+              table.insert(slots, {signal = {type="virtual", name="output-signal"}, count = count, index = 2})
             end
           end
+        end
+        if not f1 then
+          table.insert(slots, {signal = signal, count = ncount, index = 1})
+          table.insert(slots, {signal = {type="virtual", name="output-signal"}, count = count, index = 2})
         end
         control.parameters = {
           parameters = slots
