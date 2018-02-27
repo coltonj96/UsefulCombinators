@@ -6,7 +6,7 @@ data:extend(
 		order = "u",
 		inventory_order = "u",
 		icon = "__UsefulCombinators__/graphics/icons/clock.png",
-    icon_size = 64
+   		icon_size = 64
 	},
   {
 		type = "item-subgroup",
